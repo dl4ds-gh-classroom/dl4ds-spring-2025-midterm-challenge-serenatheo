@@ -16,7 +16,8 @@ import wandb  # Logs metrics, saves models, allows comparing results across runs
 import json  # Useful for saving/loading configs (e.g., hyperparameters, results)
 # PyTorch utilities for loading and batching datasets efficiently
 from torch.utils.data import random_split, DataLoader  # `random_split` for train/val split, `DataLoader` for batching and shuffling
-
+import eval_cifar100  # Import evaluation script for clean test data
+import eval_ood  # Import evaluation script for OOD test
 
 # Define a simple CNN model for classifying CIFAR-100 images
 class SimpleCNN(nn.Module):  # Define a neural network class
@@ -189,8 +190,6 @@ def main():
 
     wandb.finish()  # Finish logging session
 
-    import eval_cifar100  # Import evaluation script for clean test data
-    import eval_ood  # Import evaluation script for OOD test
 
     model.load_state_dict(torch.load("best_model.pth"))  # Load best model
     model.eval()  # Set model to evaluation mode
