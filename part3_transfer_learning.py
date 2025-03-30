@@ -71,7 +71,6 @@ def validate(model, valloader, criterion, device):
 
     with torch.no_grad():  # No gradient computation needed
         progress_bar = tqdm(valloader, desc="[Validate]", leave=False)
-
         for i, (inputs, labels) in enumerate(progress_bar):
             inputs, labels = inputs.to(device), labels.to(device)
             outputs = model(inputs)  # Forward pass only
@@ -83,6 +82,7 @@ def validate(model, valloader, criterion, device):
             correct += predicted.eq(labels).sum().item()  # Compare with true label
 
             progress_bar.set_postfix({"loss": running_loss / (i+1), "acc": 100. * correct / total})
+
 
     # Return average validation loss and accuracy
     return running_loss / len(valloader), 100. * correct / total
@@ -103,7 +103,8 @@ def main():
         "seed": 42  # Seed for reproducibility
     }
 
-    # Set all random seeds for reproducibility
+
+    # Setting all random seeds for reproducibility
     torch.manual_seed(CONFIG["seed"])
     np.random.seed(CONFIG["seed"])
     import random
@@ -116,9 +117,7 @@ def main():
     import pprint
     pprint.pprint(CONFIG)
 
-    # --------------------------
     # Data Preprocessing
-    # --------------------------
     IMAGENET_MEAN = (0.485, 0.456, 0.406)
     IMAGENET_STD = (0.229, 0.224, 0.225)
 
@@ -169,9 +168,7 @@ def main():
     # Test set: used for final evaluation
     testloader = DataLoader(testset, batch_size=CONFIG["batch_size"], shuffle=False, num_workers=CONFIG["num_workers"])
 
-    # --------------------------
     # Model, Loss, Optimizer, Scheduler
-    # --------------------------
     model = ResNet50Transfer().to(CONFIG["device"])  # Move model to device (GPU or CPU)
 
     print("\nModel summary:\n", model)
